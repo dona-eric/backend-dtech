@@ -8,7 +8,7 @@ load_dotenv(override=True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'replace-me')
-DEBUG = os.getenv('DEBUG', 'False') == 'False'
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['https://dtech-africa.alwaysdata.net']
@@ -94,14 +94,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Chemin absolu où collectstatic mettra les fichiers
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Optionnel, pour charger des fichiers statiques additionnels
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# Optionnel mais recommandé
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS
