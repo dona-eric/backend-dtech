@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'replace-me')
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['https://dtech-africa.alwaysdata.net']
+ALLOWED_HOSTS = ['dtech-africa.alwaysdata.net']
 """CONFIGURATION EMAIL"""
 
 import os
