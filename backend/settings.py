@@ -90,7 +90,18 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# URL pour accéder aux fichiers statiques
+STATIC_URL = '/static/'
+
+# Chemin absolu où collectstatic mettra les fichiers
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Optionnel, pour charger des fichiers statiques additionnels
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS
