@@ -79,11 +79,11 @@ ASGI_APPLICATION = 'backend.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'PGDATABASE': os.getenv("PGDATABASE"),
-        'PGUSER': os.getenv("UPGSER"),
-        'PGPASSWORD': os.getenv("PGPASSWORD"),
-        'PGHOST': os.getenv("PGHOST"),
-        'PGPORT': os.getenv("PGPORT"),
+        'NAME': os.getenv("PGDATABASE"),
+        'USER': os.getenv("UPGSER"),
+        'PASSWORD': os.getenv("PGPASSWORD"),
+        'HOST': os.getenv("PGHOST"),
+        'PORT': os.getenv("PGPORT"),
     }
 }
 AUTH_PASSWORD_VALIDATORS = []
