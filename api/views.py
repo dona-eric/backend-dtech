@@ -6,63 +6,70 @@ from .serializers import SignupSerializer, ContactSerializer, NewsletterSerializ
 from .utils import send_email
 from django.conf import settings
 from django.core.mail import send_mail
+
+
 class NotifyCreateModelViewSet(viewsets.ModelViewSet):
     """
     ModelViewSet générique avec notification email après création.
+    Envoie un mail à l'admin + un mail automatique à l'utilisateur (si email existe).
     """
     permission_classes = [permissions.AllowAny]
-
     email_subject = ""
     email_message_template = ""
+    user_confirmation_subject = "Merci pour votre message"
+    user_confirmation_template = "Bonjour {name},\n\nNous avons bien reçu votre message et nous vous répondrons très bientôt.\n\nCordialement,\nL'équipe DTech-Africa"
     
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         data = request.data
-        send_email(
-            subject=self.email_subject,
-            message=self.email_message_template.format(**data),
-            recipient_list=[settings.DEFAULT_FROM_EMAIL],
-        )
+
+        # Envoi à l’admin
+        if getattr(settings, "ADMIN_EMAIL", None):
+            send_mail(
+                subject=self.email_subject,
+                message=self.email_message_template.format(**data),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.ADMIN_EMAIL],
+                fail_silently=False,
+            )
+
+        # Réponse automatique à l’utilisateur
+        if "email" in data and data["email"]:
+            send_mail(
+                subject=self.user_confirmation_subject,
+                message=self.user_confirmation_template.format(**data),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[data["email"]],
+                fail_silently=True,  # ne bloque pas si l’utilisateur a mis un mauvais mail
+            )
+
         return response
 
 
-class SignupViewSet(viewsets.ModelViewSet):
+class SignupViewSet(NotifyCreateModelViewSet):
     queryset = Signup.objects.all().order_by("-created_at")
     serializer_class = SignupSerializer
-    permission_classes = [permissions.AllowAny]
-
-    def perform_create(self, serializer):
-        signup = serializer.save()
-        # Email admin (optionnel)
-        if getattr(settings, "DEFAULT_FROM_EMAIL", None):
-            send_mail(
-                subject="Nouvelle inscription",
-                message=f"Nouvelle inscription de {signup.name} ({signup.email}).",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[settings.DEFAULT_FROM_EMAIL],
-                fail_silently=True,
-            )
+    email_subject = "Nouvelle inscription"
+    email_message_template = "Nouvelle inscription de {name} ({email})."
+    user_confirmation_subject = "Bienvenue chez DTech-Africa 🎉"
+    user_confirmation_template = "Bonjour {name},\n\nMerci de vous être inscrit à nos programmes ! Nous vous contacterons bientôt.\n\nL'équipe DTech-Africa"
 
 class ContactViewSet(NotifyCreateModelViewSet):
     queryset = Contact.objects.all().order_by("-created_at")
     serializer_class = ContactSerializer
-    permission_classes = [permissions.AllowAny]
+    email_subject = "Nouveau message de contact"
+    email_message_template = "De: {name} <{email}>\n\n{message}"
+    user_confirmation_subject = "Votre message a bien été reçu"
+    user_confirmation_template = "Bonjour {name},\n\nMerci pour votre message. Notre équipe reviendra vers vous dans les plus brefs délais.\n\nL'équipe DTech-Africa"
 
-    def perform_create(self, serializer):
-        contact = serializer.save()
-        if getattr(settings, "DEFAULT_FROM_EMAIL", None):
-            send_mail(
-                subject="Nouveau message de contact",
-                message=f"De: {contact.name} <{contact.email}>\n\n{contact.message}",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[settings.DEFAULT_FROM_EMAIL],
-                fail_silently=True,
-            )
 class NewsletterViewSet(NotifyCreateModelViewSet):
     queryset = Newsletter.objects.all().order_by('-created_at')
     serializer_class = NewsletterSerializer
     email_subject = "Nouvelle inscription à la newsletter"
     email_message_template = "Nouvelle inscription: {email}"
+    user_confirmation_subject = "Bienvenue à la newsletter DTech-Africa"
+    user_confirmation_template = "Bonjour,\n\nMerci de vous être abonné à notre newsletter ! Vous recevrez bientôt nos actualités.\n\nL'équipe DTech-Africa"
+
 
 
 class StandardResultsSetPagination(PageNumberPagination):

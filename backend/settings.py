@@ -8,22 +8,25 @@ load_dotenv(override=True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'replace-me')
-DEBUG = False
+DEBUG = True
 
 
-ALLOWED_HOSTS = ['dtech-africa.alwaysdata.net']
+ALLOWED_HOSTS = ['*']
 """CONFIGURATION EMAIL"""
 
 import os
 
 # SMTP Email Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('SMTP_HOST')
-EMAIL_PORT = int(os.getenv('SMTP_PORT', 25))
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = os.getenv("PORT_EMAIL")
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('SMTP_USER')
-EMAIL_HOST_PASSWORD = os.getenv('SMTP_PASS')
-DEFAULT_FROM_EMAIL = os.getenv('ADMIN_EMAIL')
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("PASSWORD_EMAIL")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+
 
 
 
@@ -71,7 +74,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 ASGI_APPLICATION = 'backend.asgi.application'
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+#DATABASE_URL = os.getenv('DATABASE_URL')
 
 DATABASES = {
     'default': {
@@ -99,6 +102,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Optionnel mais recommandé
 SECURE_SSL_REDIRECT = True
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
@@ -107,3 +111,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+
