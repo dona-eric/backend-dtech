@@ -74,18 +74,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 ASGI_APPLICATION = 'backend.asgi.application'
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+#DATABASE_URL = os.getenv('DATABASE_URL')
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("NAME"),
-        'USER': os.getenv("USER"),
-        'PASSWORD': os.getenv("PASSWORD"),
-        'HOST': os.getenv("DB_HOST"),
-        'PORT': os.getenv("DB_PORT"),
+        'PGDATABASE': os.getenv("PGDATABASE"),
+        'PGUSER': os.getenv("UPGSER"),
+        'PGPASSWORD': os.getenv("PGPASSWORD"),
+        'PGHOST': os.getenv("PGHOST"),
+        'PGPORT': os.getenv("PGPORT"),
     }
-}"""
+}
 AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'en-us'
