@@ -8,7 +8,7 @@ load_dotenv(override=True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'replace-me')
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['*']
@@ -25,7 +25,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("PASSWORD_EMAIL")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
-ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+ADMIN_EMAIL = os.getenv("EMAIL_HOST_USER")
 
 
 
@@ -101,10 +101,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Optionnel mais recommandé
-SECURE_SSL_REDIRECT = True
+#SECURE_SSL_REDIRECT = True
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

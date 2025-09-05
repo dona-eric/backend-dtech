@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_DB: dtech_db
+      POSTGRES_USER: dtech_user
+      POSTGRES_PASSWORD: dtech_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+  build: .
+  container_name: backend
+  restart: always
+  command: gunicorn --bind 0.0.0.0:8000 backend.wsgi:application
+  volumes:
+    - .:/app
+  ports:
+    - "8000:8000"
+  depends_on:
+    - db
+  environment:
+    - NAME=dtech_db
+    - USER=dtech_user
+    - PASSWORD=dtech_pass
+    - DB_HOST=db
+    - DB_PORT=5432
+    - DJANGO_SETTINGS_MODULE=backend.settings
+    - DEBUG=False
+    - ALLOWED_HOSTS=*
