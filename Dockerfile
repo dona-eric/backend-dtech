@@ -20,12 +20,7 @@ COPY . .
 
 # Variables d’environnement
 ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=backend.settings \
-    DB_HOST=postgresql-dtech-africa.alwaysdata.net \
-    DB_PORT=5432 \
-    USER=dtech-africa \
-    PASSWORD=Uftx7YKnW*z5SF# \
-    NAME=dtech-africa_base
+    DJANGO_SETTINGS_MODULE=backend.settings
 
 COPY start.sh /app/start.sh
 
